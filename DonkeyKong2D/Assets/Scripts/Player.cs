@@ -23,12 +23,16 @@ public class Player : MonoBehaviour
     public float moveSpeed = 3f;
     public float jumpStr = 4f;
 
+    //private GameManager gm;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         results = new Collider2D[4]; //we can control 4 colliders2d in a time
+
+        //gm = new GameManager();
     }
 
     private void OnEnable() //when mario enable
@@ -128,6 +132,22 @@ public class Player : MonoBehaviour
         else//idle animation
         {
             spriteRenderer.sprite = runSprites[0];
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Objective"))
+        {
+            enabled = false;
+            //gm.LevelComplete(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
+            FindObjectOfType<GameManager>().LevelComplete();    //****** this is not a big deal bcs of this is little game but what can i use instead of this.******
+        }
+        else if (col.gameObject.CompareTag("Obstacle"))
+        {
+            enabled = false;
+            //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
+            FindObjectOfType<GameManager>().LevelFailed(); 
         }
     }
 }

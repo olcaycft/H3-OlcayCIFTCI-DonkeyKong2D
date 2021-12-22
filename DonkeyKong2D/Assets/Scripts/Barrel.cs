@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Barrel : MonoBehaviour
 {
-    private Rigidbody2D rigidbody2D;
+    private new Rigidbody2D rigidbody2D;
     private float speed = 5f;
 
     private void Awake()
