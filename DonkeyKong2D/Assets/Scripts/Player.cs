@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private Collider2D[] results;
     private new Collider2D collider;
     private bool grounded;
+    private bool climbing;
     
     public float moveSpeed = 3f;
 
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
     private void CollisonChecker()
     {
         grounded = false;
+        climbing = false;
         Vector2 size = collider.bounds.size;  
         size.x /= 2f; //this will helps for more realistic, we will climb when our bodys half touch the ladder
         size.y += 0.1f; //this will helps for overlapping
@@ -42,6 +44,10 @@ public class Player : MonoBehaviour
                 
                 Physics2D.IgnoreCollision(collider,results[i],!grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
             }
+            if (hit.layer==LayerMask.NameToLayer("Ladder"))
+            {
+                climbing = true;
+            }
                 
             
         }
@@ -49,8 +55,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         CollisonChecker();
-        
-        if (grounded && Input.GetButtonDown("Jump"))
+        if (climbing)
+        {
+            direction.y = Input.GetAxis("Vertical")*moveSpeed;
+        }
+        else if (grounded && Input.GetButtonDown("Jump"))
         {
             direction = Vector2.up * jumpStr;
         } else
