@@ -6,23 +6,39 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
+    public Sprite[] runSprites;
+    public Sprite climbSprite;
+    private int spriteIndex;
+
     private new Rigidbody2D rigidbody2D;
     private Vector2 direction;
 
     private Collider2D[] results;
     private new Collider2D collider;
+    
     private bool grounded;
     private bool climbing;
     
     public float moveSpeed = 3f;
-
     public float jumpStr = 4f;
 
     private void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         results = new Collider2D[4]; //we can control 4 colliders2d in a time
+    }
+
+    private void OnEnable() //when mario enable
+    {
+        InvokeRepeating(nameof(AnimateSprite),1f/12f,1f/12f);
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
     }
 
     private void CollisonChecker()
@@ -62,7 +78,8 @@ public class Player : MonoBehaviour
         else if (grounded && Input.GetButtonDown("Jump"))
         {
             direction = Vector2.up * jumpStr;
-        } else
+        } 
+        else
         {
             direction += Physics2D.gravity * Time.deltaTime; //if im not jumping use gravity on me in every seconds
         }
@@ -85,5 +102,32 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rigidbody2D.MovePosition(rigidbody2D.position + direction * Time.fixedDeltaTime); //when fixed update work apply position.
+    }
+
+    private void AnimateSprite()
+    {
+        if (climbing)
+        {
+            spriteRenderer.sprite = climbSprite;
+        }
+        else if (direction.x != 0f && grounded) //if mario moving
+        {
+            spriteIndex++;
+            if (spriteIndex>=runSprites.Length) //for infinite loop
+            {
+                spriteIndex = 0;
+            }
+
+            spriteRenderer.sprite = runSprites[spriteIndex];
+            
+        }
+        else if (!grounded) //jumping animation
+        {
+            spriteRenderer.sprite = runSprites[1];
+        }
+        else//idle animation
+        {
+            spriteRenderer.sprite = runSprites[0];
+        }
     }
 }
