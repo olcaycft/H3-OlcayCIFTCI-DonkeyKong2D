@@ -141,13 +141,13 @@ public class Player : MonoBehaviour
         {
             enabled = false;
             //gm.LevelComplete(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
-            FindObjectOfType<GameManager>().LevelComplete();    //****** this is not a big deal bcs of this is little game but what can i use instead of this.******
+            FindObjectOfType<GameManager>().LevelComplete();    //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
         }
         else if (col.gameObject.CompareTag("Obstacle"))
         {
             enabled = false;
             //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
-            FindObjectOfType<GameManager>().LevelFailed(); 
+            FindObjectOfType<GameManager>().LevelFailed();      //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
         }
     }
 }
