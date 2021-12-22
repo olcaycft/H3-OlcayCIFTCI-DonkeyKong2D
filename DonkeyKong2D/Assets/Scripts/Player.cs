@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
         results = new Collider2D[4]; //we can control 4 colliders2d in a time
     }
 
-    private void ColliderChecker()
+    private void CollisonChecker()
     {
         grounded = false;
         Vector2 size = collider.bounds.size;  
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        ColliderChecker();
+        CollisonChecker();
         
         if (grounded && Input.GetButtonDown("Jump"))
         {
