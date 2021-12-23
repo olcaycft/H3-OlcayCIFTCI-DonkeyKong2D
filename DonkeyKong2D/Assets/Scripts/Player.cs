@@ -6,10 +6,12 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    public Sprite[] runSprites;
-    public Sprite climbSprite;
-    private int spriteIndex;
+    //private SpriteRenderer spriteRenderer;
+    //public Sprite[] runSprites;
+    //public Sprite climbSprite;
+    //private int runningSpriteIndex;
+
+    public Animator animator;
 
     private new Rigidbody2D rigidbody2D;
     private Vector2 direction;
@@ -27,7 +29,10 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        //spriteRenderer = GetComponent<SpriteRenderer>();
+
+        animator = GetComponent<Animator>();
+        
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         results = new Collider2D[4]; //we can control 4 colliders2d in a time
@@ -60,7 +65,7 @@ public class Player : MonoBehaviour
             GameObject hit = results[i].gameObject;
             if (hit.layer==LayerMask.NameToLayer("Ground"))
             {
-                grounded = (hit.transform.position.y < (this.transform.position.y - 0.5f)) && !climbing; //grounded will be true if ground y position lower than mario's half size.
+                grounded = (hit.transform.position.y < (this.transform.position.y - 0.5f)) && !climbing; //grounded will be true if ground y position lower than mario's half size. and mario dont climbing
                 
                 Physics2D.IgnoreCollision(collider,results[i],!grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
                 
@@ -72,12 +77,17 @@ public class Player : MonoBehaviour
             }
             if (hit.layer==LayerMask.NameToLayer("LadderDown"))
             {
-                if(Input.GetAxis("Vertical")<0f)
+                if(Input.GetAxis("Vertical")<0f) //if when player on ladderdown collider and if hits the down button.
                 {
                     climbing = true;
                 }
                 
             }
+            if (hit.layer==LayerMask.NameToLayer("Hammer"))
+            {
+                HammerSmash();
+            }
+            
                 
             
         }
@@ -122,26 +132,29 @@ public class Player : MonoBehaviour
     {
         if (climbing)
         {
-            spriteRenderer.sprite = climbSprite;
+            //spriteRenderer.sprite = climbSprite;
         }
         else if (direction.x != 0f && grounded) //if mario moving
         {
-            spriteIndex++;
-            if (spriteIndex>=runSprites.Length) //for infinite loop
+            /*runningSpriteIndex++;
+            if (runningSpriteIndex>=runSprites.Length) //for infinite loop
             {
-                spriteIndex = 0;
+                runningSpriteIndex = 0;
             }
 
-            spriteRenderer.sprite = runSprites[spriteIndex];
+            spriteRenderer.sprite = runSprites[runningSpriteIndex];*/
+            animator.SetBool("IsRun",true);
             
         }
         else if (!grounded) //jumping animation
         {
-            spriteRenderer.sprite = runSprites[1];
+            //spriteRenderer.sprite = runSprites[1];
+            animator.SetTrigger("Jump");
         }
         else//idle animation
         {
-            spriteRenderer.sprite = runSprites[0];
+            animator.SetBool("IsRun",false);
+            animator.SetTrigger("Mario_idle");
         }
     }
 
@@ -150,14 +163,19 @@ public class Player : MonoBehaviour
         if (col.gameObject.CompareTag("Objective"))
         {
             enabled = false;
-            //gm.LevelComplete(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
+            //gm.LevelComplete(); //i think i couldnt use like this bcs of GameManager in(related) GameObject or bcs of MonoBehaviour.
             FindObjectOfType<GameManager>().LevelComplete();    //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
         }
         else if (col.gameObject.CompareTag("Obstacle"))
         {
             enabled = false;
-            //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject.
+            //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject or bcs of MonoBehaviour.
             FindObjectOfType<GameManager>().LevelFailed();      //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
         }
+    }
+
+    private void HammerSmash()
+    {
+        //hammer smashing animation will start here 
     }
 }

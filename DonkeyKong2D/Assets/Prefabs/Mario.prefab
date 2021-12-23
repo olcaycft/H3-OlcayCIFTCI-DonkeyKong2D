@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7009178178311166716}
   - component: {fileID: 7009178178311166719}
   - component: {fileID: -7725605532628318007}
+  - component: {fileID: 5013416103998351324}
   m_Layer: 0
   m_Name: Mario
   m_TagString: Player
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7009178178311166718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.042, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -134,11 +135,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afdec1ce5816ce4086fb92a8f7bc2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSprites:
-  - {fileID: 21300000, guid: 624c885fe35c0f14f9ffe50a2bcae1c5, type: 3}
-  - {fileID: 21300000, guid: 3b1323bcdc46e90439f6594ff6353291, type: 3}
-  - {fileID: 21300000, guid: 624c885fe35c0f14f9ffe50a2bcae1c5, type: 3}
-  - {fileID: 21300000, guid: 93c14c82f6b03de498a745ee32a5c4c7, type: 3}
-  climbSprite: {fileID: 21300000, guid: e304f525944e327429cca31e4e99f3fb, type: 3}
+  animator: {fileID: 5013416103998351324}
   moveSpeed: 1
   jumpStr: 4
+--- !u!95 &5013416103998351324
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7009178178311166718}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7aa2d12e657204942add649d74ba8e10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
