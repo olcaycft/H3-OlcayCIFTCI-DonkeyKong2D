@@ -18,5 +18,9 @@ public class Barrel : MonoBehaviour
             rigidbody2D.AddForce(col.transform.right*speed,ForceMode2D.Impulse); //this right will be red arrows on Scenes and with forcemode2d.impuls its will be instant force
             
         }
+        else if (col.gameObject.layer == LayerMask.NameToLayer("BarrelDestroyer"))
+        {
+            Destroy(this.gameObject); //when the barrels comes end of the scene they will destroy
+        }
     }
 }
