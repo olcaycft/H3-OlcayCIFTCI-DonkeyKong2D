@@ -60,13 +60,23 @@ public class Player : MonoBehaviour
             GameObject hit = results[i].gameObject;
             if (hit.layer==LayerMask.NameToLayer("Ground"))
             {
-                grounded = hit.transform.position.y < (this.transform.position.y - 0.5f); //grounded will be true if ground y position lower than mario's half size.
+                grounded = (hit.transform.position.y < (this.transform.position.y - 0.5f)) && !climbing; //grounded will be true if ground y position lower than mario's half size.
                 
                 Physics2D.IgnoreCollision(collider,results[i],!grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
+                
             }
             if (hit.layer==LayerMask.NameToLayer("Ladder"))
             {
                 climbing = true;
+                grounded = false;
+            }
+            if (hit.layer==LayerMask.NameToLayer("LadderDown"))
+            {
+                if(Input.GetAxis("Vertical")<0f)
+                {
+                    climbing = true;
+                }
+                
             }
                 
             
