@@ -6,12 +6,8 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    //private SpriteRenderer spriteRenderer;
-    //public Sprite[] runSprites;
-    //public Sprite climbSprite;
-    //private int runningSpriteIndex;
-
     public Animator animator;
+    private string currentState;
 
     private new Rigidbody2D rigidbody2D;
     private Vector2 direction;
@@ -21,16 +17,25 @@ public class Player : MonoBehaviour
     
     private bool grounded;
     private bool climbing;
-    
+    private bool smashing;
+
     public float moveSpeed = 3f;
     public float jumpStr = 4f;
+    
+    //ANİMATİON STATES
+    private const string MARIO_IDLE = "Mario_idle";
+    private const string MARIO_RUN = "Mario_run";
+    private const string MARIO_JUMP = "Mario_jump";
+    private const string MARIO_CLIMB = "Mario_climb";
+    private const string MARIO_SMASH = "Mario_smashrun";
+
+    [SerializeField] private float smashDelay = 6f;
 
     //private GameManager gm;
 
     private void Awake()
     {
         //spriteRenderer = GetComponent<SpriteRenderer>();
-
         animator = GetComponent<Animator>();
         
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -39,16 +44,25 @@ public class Player : MonoBehaviour
 
         //gm = new GameManager();
     }
-
+    
     private void OnEnable() //when mario enable
     {
         InvokeRepeating(nameof(AnimateSprite),1f/12f,1f/12f);
     }
-
     private void OnDisable()
     {
         CancelInvoke();
     }
+    
+    private void ChangeAnimationState(string newState)
+    {
+        if (currentState == newState) return;
+        
+        animator.Play(newState);
+        currentState = newState;
+    }
+
+   
 
     private void CollisonChecker()
     {
@@ -68,14 +82,13 @@ public class Player : MonoBehaviour
                 grounded = (hit.transform.position.y < (this.transform.position.y - 0.5f)) && !climbing; //grounded will be true if ground y position lower than mario's half size. and mario dont climbing
                 
                 Physics2D.IgnoreCollision(collider,results[i],!grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
-                
             }
-            if (hit.layer==LayerMask.NameToLayer("Ladder"))
+            if (hit.layer==LayerMask.NameToLayer("Ladder") && !smashing)
             {
                 climbing = true;
                 grounded = false;
             }
-            if (hit.layer==LayerMask.NameToLayer("LadderDown"))
+            if (hit.layer==LayerMask.NameToLayer("LadderDown") && !smashing)
             {
                 if(Input.GetAxis("Vertical")<0f) //if when player on ladderdown collider and if hits the down button.
                 {
@@ -85,7 +98,8 @@ public class Player : MonoBehaviour
             }
             if (hit.layer==LayerMask.NameToLayer("Hammer"))
             {
-                HammerSmash();
+                smashing = true;
+                Invoke(nameof(SmashingComplete),smashDelay);
             }
             
                 
@@ -99,7 +113,7 @@ public class Player : MonoBehaviour
         {
             direction.y = Input.GetAxis("Vertical")*moveSpeed;
         }
-        else if (grounded && Input.GetButtonDown("Jump"))
+        else if (grounded && Input.GetButtonDown("Jump") && !smashing)
         {
             direction = Vector2.up * jumpStr;
         } 
@@ -108,11 +122,11 @@ public class Player : MonoBehaviour
             direction += Physics2D.gravity * Time.deltaTime; //if im not jumping use gravity on me in every seconds
         }
         direction.x = Input.GetAxis("Horizontal")*moveSpeed;
+        
         if (grounded) 
         {
             direction.y = Math.Max(direction.y,-1f); //the issue is when im not jumping gravity is applying every second. with that i cant move. i need to declare max arrange of gravity when im at ground
         }
-        
         
         if (direction.x>0f)
         {
@@ -121,6 +135,7 @@ public class Player : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0f, 180f, 0f); //if mario going to -x direction turning his rotation
         }
+
     }
 
     private void FixedUpdate()
@@ -132,29 +147,23 @@ public class Player : MonoBehaviour
     {
         if (climbing)
         {
-            //spriteRenderer.sprite = climbSprite;
+            ChangeAnimationState(MARIO_CLIMB);
         }
-        else if (direction.x != 0f && grounded) //if mario moving
+        else if (direction.x != 0f && grounded && !smashing) //if mario moving
         {
-            /*runningSpriteIndex++;
-            if (runningSpriteIndex>=runSprites.Length) //for infinite loop
-            {
-                runningSpriteIndex = 0;
-            }
-
-            spriteRenderer.sprite = runSprites[runningSpriteIndex];*/
-            animator.SetBool("IsRun",true);
-            
+            ChangeAnimationState(MARIO_RUN);
         }
         else if (!grounded) //jumping animation
         {
-            //spriteRenderer.sprite = runSprites[1];
-            animator.SetTrigger("Jump");
+            ChangeAnimationState(MARIO_JUMP);
+        }
+        else if (smashing)
+        {
+                ChangeAnimationState(MARIO_SMASH);
         }
         else//idle animation
         {
-            animator.SetBool("IsRun",false);
-            animator.SetTrigger("Mario_idle");
+            ChangeAnimationState(MARIO_IDLE);
         }
     }
 
@@ -174,8 +183,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HammerSmash()
+    private void SmashingComplete()
     {
-        //hammer smashing animation will start here 
+        smashing = false;
     }
+
 }

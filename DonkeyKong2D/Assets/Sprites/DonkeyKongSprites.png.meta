@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: -5511326559308369593
     second: mario_little
+  - first:
+      213: -7952400118814629297
+    second: oil_1
+  - first:
+      213: 1587803054823711873
+    second: oil_2
+  - first:
+      213: 5482618539346269359
+    second: oil_3
+  - first:
+      213: 8990515909416534525
+    second: oil_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -428,6 +440,90 @@ TextureImporter:
       bones: []
       spriteID: 741bf3fc1b5d383b0800000000000000
       internalID: -5511326559308369593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oil_1
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 312
+        width: 16
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f42a74eb93663a190800000000000000
+      internalID: -7952400118814629297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oil_2
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 312
+        width: 16
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1842c004772090610800000000000000
+      internalID: 1587803054823711873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oil_3
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 312
+        width: 16
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5000038, y: 0.48557854}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa494bc638c261c40800000000000000
+      internalID: 5482618539346269359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oil_4
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 312
+        width: 16
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5000038, y: 0.48918438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df14548f59ab4cc70800000000000000
+      internalID: 8990515909416534525
       vertices: []
       indices: 
       edges: []

@@ -17,10 +17,10 @@ TagManager:
   - Ladder
   - LadderDown
   - BarrelDestroyer
-  - 
-  - 
-  - 
-  - 
+  - Hammer
+  - Weapon
+  - Player
+  - HammerEffect
   - 
   - 
   - 
