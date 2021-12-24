@@ -22,9 +22,5 @@ public class Barrel : MonoBehaviour
         {
             Destroy(this.gameObject); //when the barrels comes end of the scene they will destroy
         }
-        else if (col.gameObject.layer == LayerMask.NameToLayer("Weapon"))
-        {
-            //TO DO Destroy barrels and add 500 point
-        }
     }
 }

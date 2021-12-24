@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     public Animator animator;
-    private string currentState;
+    //private string currentState;
 
     private new Rigidbody2D rigidbody2D;
     private Vector2 direction;
@@ -56,10 +56,10 @@ public class Player : MonoBehaviour
     
     private void ChangeAnimationState(string newState)
     {
-        if (currentState == newState) return;
+        //if (currentState == newState) return;
         
         animator.Play(newState);
-        currentState = newState;
+        //currentState = newState;
     }
 
    
@@ -86,7 +86,6 @@ public class Player : MonoBehaviour
             if (hit.layer==LayerMask.NameToLayer("Ladder") && !smashing)
             {
                 climbing = true;
-                grounded = false;
             }
             if (hit.layer==LayerMask.NameToLayer("LadderDown") && !smashing)
             {
@@ -98,12 +97,12 @@ public class Player : MonoBehaviour
             }
             if (hit.layer==LayerMask.NameToLayer("Hammer"))
             {
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 smashing = true;
+                size.x /= 2f;
                 Invoke(nameof(SmashingComplete),smashDelay);
             }
-            
-                
-            
+         
         }
     }
     private void Update()
@@ -186,6 +185,7 @@ public class Player : MonoBehaviour
     private void SmashingComplete()
     {
         smashing = false;
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
     }
 
 }
