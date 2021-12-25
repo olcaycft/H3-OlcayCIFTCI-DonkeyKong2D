@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 3f;
     public float jumpStr = 4f;
     
-    //ANİMATİON STATES
+    //ANIMATION STATES
     private const string MARIO_IDLE = "Mario_idle";
     private const string MARIO_RUN = "Mario_run";
     private const string MARIO_JUMP = "Mario_jump";
