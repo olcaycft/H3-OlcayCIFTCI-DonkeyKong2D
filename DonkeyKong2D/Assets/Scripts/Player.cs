@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
 
     private Collider2D[] results;
     private new Collider2D collider;
-    
+
     private bool grounded;
     private bool climbing;
     private bool smashing;
@@ -37,72 +37,72 @@ public class Player : MonoBehaviour
     {
         //spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        
+
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
         results = new Collider2D[4]; //we can control 4 colliders2d in a time
 
         //gm = new GameManager();
     }
-    
+
     private void OnEnable() //when mario enable
     {
-        InvokeRepeating(nameof(AnimateSprite),1f/12f,1f/12f);
+        InvokeRepeating(nameof(AnimateSprite), 1f / 12f, 1f / 12f);
     }
     private void OnDisable()
     {
         CancelInvoke();
     }
-    
+
     private void ChangeAnimationState(string newState)
     {
         //if (currentState == newState) return;
-        
+
         animator.Play(newState);
         //currentState = newState;
     }
 
-   
+
 
     private void CollisonChecker()
     {
         grounded = false;
         climbing = false;
-        Vector2 size = collider.bounds.size;  
+        Vector2 size = collider.bounds.size;
         size.x /= 2f; //this will helps for more realistic, we will climb when our bodys half touch the ladder
         size.y += 0.1f; //this will helps for overlapping
-        
-        
-        int amount = Physics2D.OverlapBoxNonAlloc(transform.position,size,0f,results); //this overlapbox method no consume ram alloc
+
+
+        int amount = Physics2D.OverlapBoxNonAlloc(transform.position, size, 0f, results); //this overlapbox method no consume ram alloc
         for (int i = 0; i < amount; i++)
         {
             GameObject hit = results[i].gameObject;
-            if (hit.layer==LayerMask.NameToLayer("Ground"))
+            if (hit.layer == LayerMask.NameToLayer("Ground"))
             {
                 grounded = (hit.transform.position.y < (this.transform.position.y - 0.5f)) && !climbing; //grounded will be true if ground y position lower than mario's half size. and mario dont climbing
-                
-                Physics2D.IgnoreCollision(collider,results[i],!grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
+
+                Physics2D.IgnoreCollision(collider, results[i], !grounded); // if mario jump we are ignore collision bcs of for dont hit mario's head to top.
             }
-            if (hit.layer==LayerMask.NameToLayer("Ladder") && !smashing)
+            if (hit.layer == LayerMask.NameToLayer("Ladder") && !smashing)
             {
                 climbing = true;
             }
-            if (hit.layer==LayerMask.NameToLayer("LadderDown") && !smashing)
+            if (hit.layer == LayerMask.NameToLayer("LadderDown") && !smashing)
             {
-                if(Input.GetAxis("Vertical")<0f) //if when player on ladderdown collider and if hits the down button.
+                if (Input.GetAxis("Vertical") < 0f) //if when player on ladderdown collider and if hits the down button.
                 {
                     climbing = true;
                 }
-                
+
             }
-            if (hit.layer==LayerMask.NameToLayer("Hammer"))
+            if (hit.layer == LayerMask.NameToLayer("Hammer"))
             {
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 smashing = true;
                 size.x /= 2f;
-                Invoke(nameof(SmashingComplete),smashDelay);
+                Invoke(nameof(SmashingComplete), smashDelay);
             }
-         
+
         }
     }
     private void Update()
@@ -110,27 +110,28 @@ public class Player : MonoBehaviour
         CollisonChecker();
         if (climbing)
         {
-            direction.y = Input.GetAxis("Vertical")*moveSpeed;
+            direction.y = Input.GetAxis("Vertical") * moveSpeed;
         }
         else if (grounded && Input.GetButtonDown("Jump") && !smashing)
         {
             direction = Vector2.up * jumpStr;
-        } 
+        }
         else
         {
             direction += Physics2D.gravity * Time.deltaTime; //if im not jumping use gravity on me in every seconds
         }
-        direction.x = Input.GetAxis("Horizontal")*moveSpeed;
-        
-        if (grounded) 
+        direction.x = Input.GetAxis("Horizontal") * moveSpeed;
+
+        if (grounded)
         {
-            direction.y = Math.Max(direction.y,-1f); //the issue is when im not jumping gravity is applying every second. with that i cant move. i need to declare max arrange of gravity when im at ground
+            direction.y = Math.Max(direction.y, -1f); //the issue is when im not jumping gravity is applying every second. with that i cant move. i need to declare max arrange of gravity when im at ground
         }
-        
-        if (direction.x>0f)
+
+        if (direction.x > 0f)
         {
             transform.eulerAngles = Vector3.zero;
-        }else if (direction.x<0f)
+        }
+        else if (direction.x < 0f)
         {
             transform.eulerAngles = new Vector3(0f, 180f, 0f); //if mario going to -x direction turning his rotation
         }
@@ -158,7 +159,7 @@ public class Player : MonoBehaviour
         }
         else if (smashing)
         {
-                ChangeAnimationState(MARIO_SMASH);
+            ChangeAnimationState(MARIO_SMASH);
         }
         else//idle animation
         {
@@ -176,9 +177,12 @@ public class Player : MonoBehaviour
         }
         else if (col.gameObject.CompareTag("Obstacle"))
         {
-            enabled = false;
-            //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject or bcs of MonoBehaviour.
-            FindObjectOfType<GameManager>().LevelFailed();      //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
+            if (col.otherCollider.CompareTag("Player"))
+            {
+                enabled = false;
+                //gm.LevelFailed(); //i think i couldnt use like this bcs of GameManager in(related) GameObject or bcs of MonoBehaviour.
+                FindObjectOfType<GameManager>().LevelFailed();      //****** this is not a big deal bcs of this is a little game but what can i use instead of this.******
+            }
         }
     }
 
